@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+librosa
+soundfile
+numpy
+scipy
+scikit-learn
+joblib
+python-multipart
+pytest
+httpx>=0.24.0
+pillow
+matplotlib
+pandas

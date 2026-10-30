@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeepDetect — AI Audio Detector</title>
+  <meta name="description"
+    content="Upload an audio clip and instantly find out if it is real human speech or AI-generated deepfake audio." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+
+  <!-- Background animated blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <div class="page-wrapper">
+
+    <!-- ── Header ────────────────────────────────── -->
+    <header class="site-header">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        <span class="logo-text">Deep<span class="accent">Detect</span></span>
+      </div>
+      <p class="tagline">AI-Powered Deepfake Audio Detection</p>
+    </header>
+
+    <!-- ── Main Card ──────────────────────────────── -->
+    <main class="main-card glass">
+
+      <!-- Upload Zone -->
+      <section class="upload-section" id="uploadSection">
+        <div class="upload-zone glass-inner" id="dropZone">
+          <div class="upload-icon-wrap">
+            <div class="upload-icon-pulse"></div>
+            <span class="upload-icon">🎙️</span>
+          </div>
+          <h2 class="upload-title">Drop your audio file here</h2>
+          <p class="upload-sub">or click to browse — WAV, MP3, FLAC, OGG, M4A supported</p>
+          <label class="btn btn-primary" for="fileInput" id="browseBtn">
+            Browse File
+          </label>
+          <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.ogg,.m4a,.aac" hidden />
+        </div>
+      </section>
+
+      <!-- File Info Bar (shown after selection) -->
+      <section class="file-info glass-inner hidden" id="fileInfo">
+        <div class="file-icon">🎵</div>
+        <div class="file-details">
+          <span class="file-name" id="fileName">—</span>
+          <span class="file-size" id="fileSize">—</span>
+        </div>
+        <button class="btn btn-ghost" id="clearBtn">✕ Clear</button>
+      </section>
+
+      <!-- Waveform Visualizer -->
+      <section class="waveform-section hidden" id="waveformSection">
+        <div class="section-label">Waveform Preview</div>
+        <div id="waveform"></div>
+        <div class="wave-controls">
+          <button class="btn btn-ghost btn-sm" id="playBtn">▶ Play</button>
+          <span class="wave-time" id="waveTime">0:00</span>
+        </div>
+      </section>
+
+      <!-- Analyze Button -->
+      <div class="analyze-wrap hidden" id="analyzeWrap">
+        <button class="btn btn-analyze" id="analyzeBtn">
+          <span class="btn-icon">⚡</span>
+          Analyze Audio
+        </button>
+      </div>
+
+      <!-- Processing Spinner -->
+      <section class="processing hidden" id="processingSection">
+        <div class="spinner-ring"></div>
+        <div class="processing-steps">
+          <div class="step" id="step1">🔍 Extracting audio features…</div>
+          <div class="step" id="step2">🧠 Running detection model…</div>
+          <div class="step" id="step3">📊 Generating report…</div>
+        </div>
+      </section>
+
+      <!-- Result Panel -->
+      <section class="result-panel glass-inner hidden" id="resultPanel">
+        <div class="result-badge-wrap">
+          <div class="result-badge" id="resultBadge">
+            <span class="result-emoji" id="resultEmoji">🟢</span>
+            <span class="result-label" id="resultLabel">REAL</span>
+          </div>
+        </div>
+
+        <div class="result-details">
+          <p class="result-verdict" id="resultVerdict">—</p>
+
+          <p class="result-message" id="resultMessage">—</p>
+
+          <div class="result-meta">
+            <span class="meta-chip" id="metaFile">📁 —</span>
+            <span class="meta-chip" id="metaFeatures">📊 — features</span>
+          </div>
+        </div>
+
+        <button class="btn btn-ghost btn-sm mt" id="analyzeAgainBtn">Analyze Another File</button>
+      </section>
+
+      <!-- Error Panel -->
+      <section class="error-panel glass-inner hidden" id="errorPanel">
+        <span class="error-icon">⚠️</span>
+        <p class="error-message" id="errorMessage">Something went wrong.</p>
+        <button class="btn btn-ghost btn-sm" id="retryBtn">Try Again</button>
+      </section>
+
+    </main>
+
+    <!-- ── How It Works ────────────────────────────── -->
+    <section class="how-it-works">
+      <h3 class="section-title">How It Works</h3>
+      <div class="steps-grid">
+        <div class="step-card glass">
+          <div class="step-num">01</div>
+          <div class="step-icon">📤</div>
+          <h4>Upload Audio</h4>
+          <p>Drag & drop or browse for any audio file up to 10 MB.</p>
+        </div>
+        <div class="step-card glass">
+          <div class="step-num">02</div>
+          <div class="step-icon">🔬</div>
+          <h4>Feature Extraction</h4>
+          <p>186 acoustic features extracted — MFCCs, chroma, spectral, mel-spectrogram.</p>
+        </div>
+        <div class="step-card glass">
+          <div class="step-num">03</div>
+          <div class="step-icon">🤖</div>
+          <h4>ML Detection</h4>
+          <p>Gradient Boosting classifier distinguishes natural vs synthetic patterns.</p>
+        </div>
+        <div class="step-card glass">
+          <div class="step-num">04</div>
+          <div class="step-icon">📋</div>
+          <h4>Instant Result</h4>
+          <p>Get a clear REAL / FAKE verdict with a confidence score.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      DeepDetect Audio Detection System
+    </footer>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+librosa
+soundfile
+numpy
+scipy
+scikit-learn
+joblib
+python-multipart
+pytest
+httpx>=0.24.0
+# Multi-view pipeline additions
+tensorflow>=2.13,<2.17
+pillow
+matplotlib
+pandas

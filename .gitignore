@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+vnv/
+**/venv/
+**/vnv/
+**/.venv/
+
+# Environment files
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Model files
+*.keras
+*.h5
+*.pt
+*.pth
+*.onnx
+
+# OS
+.DS_Store
+Thumbs.db
